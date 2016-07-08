@@ -550,6 +550,21 @@ class LxMPD {
 		return $this->getCurrentTrack();
 	}
 
+	/**
+	 * @param $uri URI of the song to queue
+	 * @param bool $duplicatesAllowed
+	 * @return int position of track in playlist
+	 */
+	public function queue($uri, $duplicatesAllowed = true) {
+
+		if (!$duplicatesAllowed) {
+			//todo: check if track is in current playlist and if so, return position
+		}
+
+		$this->runCommand('add', $uri);
+
+	}
+
 	public function getCurrentTrack() {
 
 		// Refresh the LxMPD instance with fresh statistics
