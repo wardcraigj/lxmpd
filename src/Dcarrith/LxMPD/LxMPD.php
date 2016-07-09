@@ -773,6 +773,11 @@ class LxMPD {
 		unset($this->_properties[$name]);
 	}
 
+	public function listplaylists() {
+
+		return $this->call('listplaylists');
+	}
+
 	/**
 	 * Writes data to the MPD socket
 	 *
