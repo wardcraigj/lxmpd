@@ -63,35 +63,47 @@ class LxMPD {
 	public $playlist = array();
 
 	// Variable to specify whether or not playlist tracks should be filtered down to only contain essential tags
-	private $_debugging = false;
+
+	public $status = [];
 
 	// Variable to specify whether or not to throw missing tag exceptions for tracks that are missing essetial tags
-	private $_tagFiltering = true;
+
+	private $_debugging = false;
 
 	// Variable for storing properties available via PHP magic methods: __set(), __get(), __isset(), __unset()
-	private $_throwMissingTagExceptions = false;
+
+	private $_tagFiltering = true;
 
 	// The essential id3 tags that we need when chunking an array of output into chunks of 8 elements
-	private $_properties = array();
+
+	private $_throwMissingTagExceptions = false;
 
 	// The essential MPD tags that we need in combination with essentialID3Tags when chunking an array of output into chunks of 8 elements
-	private $_essentialID3Tags = array("Artist", "Album", "Title", "Track", "Time");
+
+	private $_properties = array();
 
 	// This is an array of commands that return either single tracks or a list of tracks that would contain tags that we could filter
-	private $_essentialMPDTags = array("file", "Pos", "Id");
+
+	private $_essentialID3Tags = array("Artist", "Album", "Title", "Track", "Time");
 
 	// This is an array of commands whose output is expected to be an array
-	private $_outputContainsTracks = array('playlistinfo');
+
+	private $_essentialMPDTags = array("file", "Pos", "Id");
 
 	// This is an array of MPD commands that are available through the __call() magic method
-	private $_expectArrayOutput = array('commands', 'decoders', 'find', 'list', 'listall', 'listallinfo', 'listplaylist', 'listplaylistinfo', 'listplaylists', 'notcommands', 'lsinfo', 'outputs', 'playlist', 'playlistfind', 'playlistinfo', 'playlistsearch', 'plchanges', 'plchangesposid', 'search', 'tagtypes', 'urlhandlers');
+
+	private $_outputContainsTracks = array('playlistinfo');
 
 	// This is an array of MPD commands that should return a bool
-	private $_methods = array('add', 'addid', 'clear', 'clearerror', 'close', 'commands', 'consume', 'count', 'crossfade', 'currentsong', 'decoders', 'delete', 'deleteid', 'disableoutput', 'enableoutput', 'find', 'findadd', 'idle', 'kill', 'list', 'listall', 'listallinfo', 'listplaylist', 'listplaylistinfo', 'listplaylists', 'load', 'lsinfo', 'mixrampdb', 'mixrampdelay', 'move', 'moveid', 'next', 'notcommands', 'outputs', 'password', 'pause', 'ping', 'play', 'playid', 'playlist', 'playlistadd', 'playlistclear', 'playlistdelete', 'playlistfind', 'playlistid', 'playlistinfo', 'playlistmove', 'playlistsearch', 'plchanges', 'plchangesposid', 'previous', 'random', 'rename', 'repeat', 'replay_gain_mode', 'replay_gain_status', 'rescan', 'rm', 'save', 'search', 'seek', 'seekid', 'setvol', 'shuffle', 'single', 'stats', 'status', 'sticker', 'stop', 'swap', 'swapid', 'tagtypes', 'update', 'urlhandlers');
+
+	private $_expectArrayOutput = array('commands', 'decoders', 'find', 'list', 'listall', 'listallinfo', 'listplaylist', 'listplaylistinfo', 'listplaylists', 'notcommands', 'lsinfo', 'outputs', 'playlist', 'playlistfind', 'playlistinfo', 'playlistsearch', 'plchanges', 'plchangesposid', 'search', 'tagtypes', 'urlhandlers');
 
 	// This is the current playlist
-	private $_responseShouldBeBoolean = array('delete', 'password');
 
+	private $_methods = array('add', 'addid', 'clear', 'clearerror', 'close', 'commands', 'consume', 'count', 'crossfade', 'currentsong', 'decoders', 'delete', 'deleteid', 'disableoutput', 'enableoutput', 'find', 'findadd', 'idle', 'kill', 'list', 'listall', 'listallinfo', 'listplaylist', 'listplaylistinfo', 'listplaylists', 'load', 'lsinfo', 'mixrampdb', 'mixrampdelay', 'move', 'moveid', 'next', 'notcommands', 'outputs', 'password', 'pause', 'ping', 'play', 'playid', 'playlist', 'playlistadd', 'playlistclear', 'playlistdelete', 'playlistfind', 'playlistid', 'playlistinfo', 'playlistmove', 'playlistsearch', 'plchanges', 'plchangesposid', 'previous', 'random', 'rename', 'repeat', 'replay_gain_mode', 'replay_gain_status', 'rescan', 'rm', 'save', 'search', 'seek', 'seekid', 'setvol', 'shuffle', 'single', 'stats', 'status', 'sticker', 'stop', 'swap', 'swapid', 'tagtypes', 'update', 'urlhandlers');
+
+	private $_responseShouldBeBoolean = array('delete', 'password');
+	
 	private $mandatoryStatusFields = [
 		'repeat',
 		'random',
@@ -767,6 +779,7 @@ class LxMPD {
 	}
 
 	public function getStatus() {
+
 
 		foreach ($this->mandatoryStatusFields as $key) {
 			if (!isset($this->status[$key])) {
