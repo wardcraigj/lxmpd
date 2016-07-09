@@ -745,6 +745,11 @@ class LxMPD {
 		return json_encode((array) $this);
 	}
 
+	public function getStatus() {
+
+		return $this->status;
+	}
+
 	/**
 	 * PHP magic methods __call(), __get(), __set(), __isset(), __unset()
 	 *
