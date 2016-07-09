@@ -92,6 +92,27 @@ class LxMPD {
 	// This is the current playlist
 	private $_responseShouldBeBoolean = array('delete', 'password');
 
+	private $mandatoryStatusFields = [
+		'repeat',
+		'random',
+		'single',
+		'consume',
+		'volume',
+		'xfade',
+		'mixrampdb',
+		'mixrampdelay',
+		'playlist_id',
+		'playlist_length',
+		'song',
+		'songid',
+		'nextsong',
+		'nextsongid',
+		'time',
+		'elapsed',
+		'bitrate',
+		'audio',
+	];
+
 	/**
 	 * Set connection paramaters.
 	 *
@@ -746,6 +767,12 @@ class LxMPD {
 	}
 
 	public function getStatus() {
+
+		foreach ($this->mandatoryStatusFields as $key) {
+			if (!isset($this->status[$key])) {
+				$this->status[$key] = 0;
+			}
+		}
 
 		return $this->status;
 	}
